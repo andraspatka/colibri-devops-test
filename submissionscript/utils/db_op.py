@@ -48,9 +48,9 @@ def get_data(query):
 def migrate(db_scripts):
     wait_for_db_ready()
     try:
-        current_db_version = int(get_data(f"SELECT version FROM versionTable;")[0]['version'])
+        current_db_version = int(get_data(f'SELECT version FROM versionTable;')[0]['version'])
     except Exception as e:
-        logging.error("Unable to determine database version!")
+        logging.error('Unable to determine database version!')
         logging.error(e)
     
     logging.info(f'Current database version is: {current_db_version}')
@@ -65,14 +65,14 @@ def migrate(db_scripts):
             # regex to extract script version. Skip leading 0 if exists, capture rest of the numbers
             script_version = int(re.search('0?(\d+)', script).group(1))
         except Exception as e:
-            logging.warn(f"No version information in script: {script}. Skipping it...")
+            logging.warn(f'No version information in script: {script}. Skipping it...')
             continue
 
-        logging.debug(f"Script {script} has version {script_version}")
+        logging.debug(f'Script {script} has version {script_version}')
         if current_db_version < script_version:
             with open(script, 'r') as f:
                 script_content = f.read()
-                logging.debug(f"Content of {script} is {script_content}")
+                logging.debug(f'Content of {script} is {script_content}')
 
                 with MysqlConnection() as conn:
                     cur = conn.connector.cursor(dictionary=True)
@@ -80,7 +80,7 @@ def migrate(db_scripts):
                     for result in cur.execute(script_content, multi=True):
                         logging.info(result.statement)
 
-                    cur.execute("UPDATE versionTable set version=%s", (script_version,))
+                    cur.execute('UPDATE versionTable set version=%s', (script_version,))
                     logging.info(f'Executed script: {script} successfully!')
 
 

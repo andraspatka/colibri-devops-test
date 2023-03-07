@@ -4,12 +4,12 @@ import logging
 import os
 
 class MysqlConnection(object):
-    """
+    '''
     MySQL Database connection class
     Can be used with python context mangers:
     with MysqlConnection(host, user, password, port) as conn:
         data = pd.read_sql(sql, conn.connector)
-    """
+    '''
 
     def __init__(self, host, user, password, port):
         self.connector = None
