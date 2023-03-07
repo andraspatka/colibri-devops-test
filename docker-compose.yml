@@ -3,6 +3,7 @@ version: '3.8'
 
 services:
   mysql_db_container:
+    platform: linux/amd64
     container_name: mysql_container
     build:
       context: .
@@ -15,6 +16,7 @@ services:
       MYSQL_DATABASE: devopstt
 
   exec_ubuntu_container:
+    platform: linux/amd64
     container_name: exec_container
     build:
       context: .
