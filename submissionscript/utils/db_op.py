@@ -35,6 +35,10 @@ def wait_for_db_ready():
 
 
 def get_data(query):
+    '''
+    Runs the query defined in :query: and returns the results
+    :return: list of rows returned by the query
+    '''
     with MysqlConnection() as conn:
         cur = conn.connector.cursor(dictionary=True)
         cur.execute(query)
@@ -46,6 +50,11 @@ def get_data(query):
 
 
 def migrate(db_scripts):
+    '''
+    Runs the SQL scripts under the folder :db_scripts:
+    Runs them in ascending order based on the version which is defined in the script name. Unversioned scripts are not executed.
+    Only executes scripts if the script version is lower than the database version defined in the table versionTable.
+    '''
     wait_for_db_ready()
     try:
         current_db_version = int(get_data(f'SELECT version FROM versionTable;')[0]['version'])
