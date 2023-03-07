@@ -44,7 +44,6 @@ def get_data(query):
         cur.execute(query)
         rows = []
         for row in cur:
-            print(row)
             rows.append(row)
         return rows
 
@@ -91,6 +90,8 @@ def migrate(db_scripts):
 
                     cur.execute('UPDATE versionTable set version=%s', (script_version,))
                     logging.info(f'Executed script: {script} successfully!')
+        else:
+            logging.info(f'Skipping execution of script {script}, DB version ({current_db_version}) >= script version ({script_version})')
 
 
 
