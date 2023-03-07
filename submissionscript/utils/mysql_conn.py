@@ -1,6 +1,7 @@
 from mysql.connector import MySQLConnection
 
 import logging
+import os
 
 class MysqlConnection(object):
     """
@@ -14,6 +15,14 @@ class MysqlConnection(object):
         self.connector = None
         self.host, self.user, self.password, self.port = host, user, password, port
 
+    def __init__(self):
+        self.connector = None
+        self.host, self.user, self.password, self.database = os.environ['DB_HOST'], os.environ['DB_USER'], os.environ['DB_PASSWORD'], os.environ['DB_NAME']
+        if 'PORT' not in os.environ:
+            self.port = 3306
+        else:
+            self.port = os.environ['PORT']
+
     def __enter__(self):
         logging.debug(f'Creating connection with parameters: host {self.host}, user {self.user}, port {self.port}')
         self.connector = MySQLConnection(
@@ -21,6 +30,7 @@ class MysqlConnection(object):
             user=self.user,
             password=self.password,
             port=self.port,
+            database=self.database,
         )
         
         return self

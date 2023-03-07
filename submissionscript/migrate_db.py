@@ -1,6 +1,8 @@
 import argparse
 import logging
 
+import os
+
 from utils.db_op import migrate
 
 parser = argparse.ArgumentParser(description='Run migration scripts')
@@ -24,4 +26,9 @@ logging.basicConfig(level=level)
 
 logging.debug(f'Script called with parameters: dbscripts: {args.dbscripts}, dbuser: {args.dbuser}, dbserver: {args.dbserver}, dbname: {args.dbname}, dbpassword: {args.dbpassword}')
 
-migrate(host=args.dbserver, port=3306, user=args.dbuser, password=args.dbpassword, db_name=args.dbname, db_scripts=args.dbscripts)
+os.environ['DB_HOST'] = args.dbserver
+os.environ['DB_USER'] = args.dbuser
+os.environ['DB_PASSWORD'] = args.dbpassword
+os.environ['DB_NAME'] = args.dbname
+
+migrate(db_scripts=args.dbscripts)
