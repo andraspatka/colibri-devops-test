@@ -1,1 +1,1 @@
-mysql-client
+mysql-connector-python
